@@ -118,13 +118,13 @@ export function socket(io) {
       }
     });
     // 매칭 취소 만들기
-    socket.on("CancelMatching", (data: any) => {
-      const rdata: any = JSON.parse(data);
-      console.log("CancelMatching", rdata, matching);
-      matching = matching.filter((value) => value.socket_id != rdata.socket_id);
+    socket.on("CancelMatching", () => {
+      console.log("CancelMatching", matching);
+      matching = matching.filter((value) => value.socket_id != socket.id);
       io.sockets.in(socket.id).emit("CancelMatchingR", {
         msg: "매칭을 취소하였습니다.",
       });
+	   console.log(matching)
     });
 
     // 게임 종료 방삭제
@@ -143,6 +143,11 @@ export function socket(io) {
     socket.on("GetText", () => {
       console.log("GetText");
     });
+	  
+	socket.on("Get",(data: any)=>{
+		const rdata: any = JSON.parse(data);
+		io.sockets.io(rdata.room_id).emit("Receive",data)
+	})
 
     // roomDB쓰면안되용
     // socket.leave(dataArray[0]);
