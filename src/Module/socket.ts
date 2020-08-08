@@ -145,8 +145,9 @@ export function socket(io) {
     });
 	  
 	socket.on("Get",(data: any)=>{
+		console.log("get",data)
 		const rdata: any = JSON.parse(data);
-		io.sockets.io(rdata.room_id).emit("Receive",data)
+		io.sockets.in(rdata.room_id).emit("Receive",data)
 	})
 
     // roomDB쓰면안되용
